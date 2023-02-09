@@ -12,10 +12,17 @@ import net.minecraft.world.phys.Vec3;
 import qouteall.imm_ptl.core.IPMcHelper;
 import qouteall.imm_ptl.core.platform_specific.IPRegistry;
 import qouteall.imm_ptl.core.portal.Portal;
+import qouteall.imm_ptl.core.portal.PortalManipulation;
 import qouteall.q_misc_util.Helper;
+import qouteall.q_misc_util.MiscHelper;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import static qouteall.imm_ptl.core.portal.PortalManipulation.getPortalCluster;
 
 public class PortalUitls {
 
@@ -49,5 +56,28 @@ public class PortalUitls {
                 return portal;
             }
         }
+    }
+
+    public static void completeBiWayPortal(
+            Portal portal
+    ) {
+        removeOverlappedPortals(
+                MiscHelper.getServer().getLevel(portal.dimensionTo),
+                portal.getDestPos(),
+                portal.transformLocalVecNonScale(portal.getNormal().scale(-1)),
+                p -> Objects.equals(portal.specificPlayerId, p.specificPlayerId)
+
+        );
+
+        TemporaryPortal result = (TemporaryPortal) PortalManipulation.completeBiWayPortal(
+                portal,
+                IPRegistry.PORTAL.get()
+        );
+    }
+    public static void removeOverlappedPortals(Level world, Vec3 pos, Vec3 normal, Predicate<Portal> predicate) {
+        getPortalCluster(world, pos, normal, predicate).forEach((e) -> {
+            e.remove(Entity.RemovalReason.KILLED);
+            //informer.accept(e);
+        });
     }
 }

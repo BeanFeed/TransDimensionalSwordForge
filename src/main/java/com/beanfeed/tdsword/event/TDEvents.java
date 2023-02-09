@@ -37,6 +37,7 @@ public class TDEvents {
                     portal.setDestination(toGo);
                     portal.setDestinationDimension(sword.getLastDimension());
                     McHelper.spawnServerEntity(portal);
+                    PortalUitls.completeBiWayPortal(portal);
                     event.setCanceled(true);
 
                 }
