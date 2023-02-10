@@ -29,7 +29,7 @@ public class TDSword extends Item {
         //TransDimensionalSword.LOGGER.info(pUsedHand.toString());
         lastDim = pLevel.dimension();
         var tempLastWaypoint = pPlayer.position();
-        lastWaypoint = new Vec3(((int)tempLastWaypoint.x) + 0.5, tempLastWaypoint.y + 1, ((int)tempLastWaypoint.z) + 0.5);
+        lastWaypoint = new Vec3(((int)tempLastWaypoint.x) - 0.5, tempLastWaypoint.y + 1, ((int)tempLastWaypoint.z) - 0.5);
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
     }
 
