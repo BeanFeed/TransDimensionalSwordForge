@@ -17,19 +17,23 @@ import org.openjdk.nashorn.internal.ir.Block;
 public class TDSword extends Item {
 
     private Vec3 lastWaypoint = null;
+    //private Vec3 lastWaypointRotation = null;
     private ResourceKey<Level> lastDim = null;
     public TDSword(Properties pProperties) {
         super(pProperties);
     }
 
     public Vec3 getLastWaypoint() { return lastWaypoint; }
+    //public Vec3 getLastWaypointRotation() { return lastWaypointRotation; }
     public ResourceKey<Level> getLastDimension() { return lastDim; }
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         //TransDimensionalSword.LOGGER.info(pUsedHand.toString());
         lastDim = pLevel.dimension();
         var tempLastWaypoint = pPlayer.position();
-        lastWaypoint = new Vec3(((int)tempLastWaypoint.x) - 0.5, tempLastWaypoint.y + 1, ((int)tempLastWaypoint.z) - 0.5);
+        //var tempLastWaypointRotation = pPlayer.getLookAngle();
+        lastWaypoint = new Vec3(((int)tempLastWaypoint.x) + 0.5, tempLastWaypoint.y + 1, ((int)tempLastWaypoint.z) + 0.5);
+        //lastWaypointRotation = new Vec3(Math.round(tempLastWaypointRotation.x), 0, Math.round(tempLastWaypointRotation.z));
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
     }
 

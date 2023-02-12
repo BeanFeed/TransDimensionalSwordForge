@@ -72,7 +72,7 @@ public class PortalUitls {
 
         TemporaryPortal result = (TemporaryPortal) PortalManipulation.completeBiWayPortal(
                 portal,
-                IPRegistry.PORTAL.get()
+                TDEntity_Types.TEMP_PORTAL.get()
         );
     }
     public static void removeOverlappedPortals(Level world, Vec3 pos, Vec3 normal, Predicate<Portal> predicate) {

@@ -4,6 +4,7 @@ import com.beanfeed.tdsword.PortalUitls;
 import com.beanfeed.tdsword.TransDimensionalSword;
 import com.beanfeed.tdsword.entity.TemporaryPortal;
 import com.beanfeed.tdsword.items.TDSword;
+import com.mojang.math.Quaternion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -32,14 +33,23 @@ public class TDEvents {
                     BlockPos orgtoSpawn = event.getPos();
                     Vec3 toSpawn = new Vec3(orgtoSpawn.getX(), orgtoSpawn.getY(), orgtoSpawn.getZ());
                     TemporaryPortal portal = PortalUitls.makeTempPortal(1,2, event.getEntity());
-                    //TemporaryPortal portal = (TemporaryPortal)port;
+                    //TemporaryPortal portal = TemporaryPortal.entityType.create(event.getLevel());
                     if (portal == null) return;
-                    portal.markOneWay();
-                    portal.unbreakable = true;
+                    //portal.markOneWay();
+                    //portal.unbreakable = true;
+                    //Vec3 toSpawn = new Vec3(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
+                    //portal.setOriginPos(toSpawn);
                     portal.setDestination(toGo);
                     portal.setDestinationDimension(sword.getLastDimension());
+                    /*portal.setOrientationAndSize(
+                            new Vec3(1, 0, 0), // axisW
+                            new Vec3(0, 1, 0), // axisH
+                            1, // width
+                            2 // height
+                    );*/
                     McHelper.spawnServerEntity(portal);
-                    //PortalUitls.completeBiWayPortal(portal);
+
+                    PortalUitls.completeBiWayPortal(portal);
                     event.setCanceled(true);
 
                 }

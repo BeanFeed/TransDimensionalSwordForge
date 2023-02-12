@@ -10,7 +10,8 @@ import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.imm_ptl.core.portal.PortalManipulation;
 import qouteall.imm_ptl.core.portal.nether_portal.GeneralBreakablePortal;
 
-public class TemporaryPortal extends GeneralBreakablePortal {
+public class TemporaryPortal extends Portal {
+    public static final EntityType<TemporaryPortal> entityType = TDEntity_Types.TEMP_PORTAL.get();
     public TemporaryPortal(EntityType<?> entityType, Level world) {
         super(entityType, world);
     }
