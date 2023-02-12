@@ -1,5 +1,6 @@
 package com.beanfeed.tdsword;
 
+import com.beanfeed.tdsword.entity.TDEntity_Types;
 import com.beanfeed.tdsword.items.TDItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -37,6 +38,7 @@ public class TransDimensionalSword {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         TDItems.register(modEventBus);
+        TDEntity_Types.register(modEventBus);
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
