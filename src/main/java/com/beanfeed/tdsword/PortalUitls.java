@@ -1,5 +1,6 @@
 package com.beanfeed.tdsword;
 
+import com.beanfeed.tdsword.entity.TDEntity_Types;
 import com.beanfeed.tdsword.entity.TemporaryPortal;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
@@ -47,7 +48,7 @@ public class PortalUitls {
                 Vec3 axisW = axisH.cross(Vec3.atLowerCornerOf(lookingDirection.getOpposite().getNormal()));
                 Vec3 pos = Vec3.atCenterOf(hitResult.getBlockPos()).add(axisH.scale(0.5 + height / 2.0));
                 Level world = hitPortals.isEmpty() ? entity.level : ((Portal)hitPortals.get(hitPortals.size() - 1)).getDestinationWorld();
-                TemporaryPortal portal = new TemporaryPortal((EntityType) IPRegistry.PORTAL.get(), world);
+                TemporaryPortal portal = new TemporaryPortal((EntityType) TDEntity_Types.TEMP_PORTAL.get(), world);
                 portal.setPosRaw(pos.x, pos.y, pos.z);
                 portal.axisW = axisW;
                 portal.axisH = axisH;
