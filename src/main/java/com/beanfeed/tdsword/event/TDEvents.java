@@ -34,10 +34,12 @@ public class TDEvents {
                     TemporaryPortal portal = PortalUitls.makeTempPortal(1,2, event.getEntity());
                     //TemporaryPortal portal = (TemporaryPortal)port;
                     if (portal == null) return;
+                    portal.markOneWay();
+                    portal.unbreakable = true;
                     portal.setDestination(toGo);
                     portal.setDestinationDimension(sword.getLastDimension());
                     McHelper.spawnServerEntity(portal);
-                    PortalUitls.completeBiWayPortal(portal);
+                    //PortalUitls.completeBiWayPortal(portal);
                     event.setCanceled(true);
 
                 }

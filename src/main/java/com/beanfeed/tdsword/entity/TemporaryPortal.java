@@ -8,8 +8,9 @@ import net.minecraft.world.level.Level;
 import qouteall.imm_ptl.core.McHelper;
 import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.imm_ptl.core.portal.PortalManipulation;
+import qouteall.imm_ptl.core.portal.nether_portal.GeneralBreakablePortal;
 
-public class TemporaryPortal extends Portal {
+public class TemporaryPortal extends GeneralBreakablePortal {
     public TemporaryPortal(EntityType<?> entityType, Level world) {
         super(entityType, world);
     }
