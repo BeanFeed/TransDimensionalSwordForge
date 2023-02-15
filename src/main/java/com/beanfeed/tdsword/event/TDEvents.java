@@ -5,7 +5,9 @@ import com.beanfeed.tdsword.TransDimensionalSword;
 import com.beanfeed.tdsword.entity.TemporaryPortal;
 import com.beanfeed.tdsword.items.TDSword;
 import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -15,7 +17,6 @@ import qouteall.imm_ptl.core.McHelper;
 import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.imm_ptl.core.portal.PortalManipulation;
 import qouteall.imm_ptl.core.portal.nether_portal.GeneralBreakablePortal;
-
 
 public class TDEvents {
 
@@ -34,11 +35,30 @@ public class TDEvents {
                     Vec3 toSpawn = new Vec3(orgtoSpawn.getX(), orgtoSpawn.getY(), orgtoSpawn.getZ());
                     TemporaryPortal portal = PortalUitls.makeTempPortal(1,2, event.getEntity());
                     //TemporaryPortal portal = TemporaryPortal.entityType.create(event.getLevel());
-                    if (portal == null) return;
+                    if (portal == null) {
+                        TransDimensionalSword.LOGGER.info("Portal Null");
+                        return;
+                    };
+
                     //portal.markOneWay();
                     //portal.unbreakable = true;
                     //Vec3 toSpawn = new Vec3(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
                     //portal.setOriginPos(toSpawn);
+                    var pRot = sword.getLastWaypointRotation();
+                    var cRot = event.getEntity().getYHeadRot();
+                    double deltaY = pRot - cRot;
+                    TransDimensionalSword.LOGGER.info("pRot: " + pRot + " cRot: " + cRot + " Dif: " + deltaY);
+                    //double angleRads = Math.atan2(deltaY, 1.0);
+                    //TransDimensionalSword.LOGGER.info("Degree: " + Math.toDegrees(angleRads));
+                    double degrees = Math.round(deltaY / 90) * 90;
+                    TransDimensionalSword.LOGGER.info("Degree Rounded: " + degrees);
+                    Quaternion rot = degrees != 0 ? new Quaternion(
+                            new Vector3f(0,1,0),
+                            (float)degrees - 180,
+                            true
+                    ) : null;
+
+                    portal.rotation = rot;
                     portal.setDestination(toGo);
                     portal.setDestinationDimension(sword.getLastDimension());
                     /*portal.setOrientationAndSize(
@@ -55,6 +75,15 @@ public class TDEvents {
                 }
             }
         }
+    }
+
+    private static Vec3 getRightVec(Entity entity) {
+        float yaw = entity.getYRot() + 90;
+        float radians = -yaw * 0.017453292F;
+
+        return new Vec3(
+                Math.sin(radians), 0, Math.cos(radians)
+        );
     }
 
 }
