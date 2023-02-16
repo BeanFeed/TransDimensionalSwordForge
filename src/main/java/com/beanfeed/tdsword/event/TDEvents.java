@@ -30,26 +30,29 @@ public class TDEvents {
                 //Do Code
                 TransDimensionalSword.LOGGER.info("Swung Sword");
                 Vec3 toGo = sword.getLastWaypoint();
+                //toGo != null checks if the sword has a saved waypoint. If not then don't run
+                //event.getEntity() != null double checks that the entity isn't null
+                //!event.getLevel().isClientSide() makes sure the code is only ran on the server
                 if(toGo != null && event.getEntity() != null && !event.getLevel().isClientSide()) {
+                    //gets block to spawn portal on top of
                     BlockPos orgtoSpawn = event.getPos();
                     Vec3 toSpawn = new Vec3(orgtoSpawn.getX(), orgtoSpawn.getY(), orgtoSpawn.getZ());
+                    //makes new portal object with dimensions
                     TemporaryPortal portal = PortalUitls.makeTempPortal(1,2, event.getEntity());
-                    //TemporaryPortal portal = TemporaryPortal.entityType.create(event.getLevel());
+
                     if (portal == null) {
+                        //Failed to make portal
                         TransDimensionalSword.LOGGER.info("Portal Null");
                         return;
                     };
 
-                    //portal.markOneWay();
-                    //portal.unbreakable = true;
-                    //Vec3 toSpawn = new Vec3(event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
-                    //portal.setOriginPos(toSpawn);
+                    //gets the players head rotation when they saved the waypoint
                     var pRot = sword.getLastWaypointRotation();
+                    //gets the players current head rotation
                     var cRot = event.getEntity().getYHeadRot();
+
                     double deltaY = pRot - cRot;
-                    TransDimensionalSword.LOGGER.info("pRot: " + pRot + " cRot: " + cRot + " Dif: " + deltaY);
-                    //double angleRads = Math.atan2(deltaY, 1.0);
-                    //TransDimensionalSword.LOGGER.info("Degree: " + Math.toDegrees(angleRads));
+
                     double degrees = Math.round(deltaY / 90) * 90;
                     TransDimensionalSword.LOGGER.info("Degree Rounded: " + degrees);
                     Quaternion rot = degrees != 0 ? new Quaternion(
@@ -61,29 +64,17 @@ public class TDEvents {
                     portal.rotation = rot;
                     portal.setDestination(toGo);
                     portal.setDestinationDimension(sword.getLastDimension());
-                    /*portal.setOrientationAndSize(
-                            new Vec3(1, 0, 0), // axisW
-                            new Vec3(0, 1, 0), // axisH
-                            1, // width
-                            2 // height
-                    );*/
+                    //Spawns the portal on the server side
                     McHelper.spawnServerEntity(portal);
-
+                    //Creates another portal at the new portals destination
                     PortalUitls.completeBiWayPortal(portal);
-                    event.setCanceled(true);
 
                 }
+                //Cancels the event, so it doesn't break the block in creative mode
+                event.setCanceled(true);
             }
         }
     }
 
-    private static Vec3 getRightVec(Entity entity) {
-        float yaw = entity.getYRot() + 90;
-        float radians = -yaw * 0.017453292F;
-
-        return new Vec3(
-                Math.sin(radians), 0, Math.cos(radians)
-        );
-    }
 
 }
