@@ -64,6 +64,7 @@ public class TDSword extends Item {
         };
     }
 
+    //Returns saved waypoint
     public Vec3 getLastWaypoint() { return lastWaypoint; }
     public float getLastWaypointRotation() { return lastWaypointYRotation; }
     public ResourceKey<Level> getLastDimension() { return lastDim; }
