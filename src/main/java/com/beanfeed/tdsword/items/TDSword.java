@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TDSword extends Item {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(2);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(3);
     private Vec3 lastWaypoint = null;
     private int lapisSlot = 0;
     private int lapisAmount = 0;
@@ -69,7 +69,7 @@ public class TDSword extends Item {
     public float getLastWaypointRotation() { return lastWaypointYRotation; }
     public ResourceKey<Level> getLastDimension() { return lastDim; }
 
-    public SimpleContainer inv = new SimpleContainer(2);
+    //public SimpleContainer inv = new SimpleContainer(2);
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
@@ -93,7 +93,7 @@ public class TDSword extends Item {
             */
             if(!pPlayer.level.isClientSide()) {
                 pPlayer.openMenu(new SimpleMenuProvider(
-                        (containerid, playerInventory, player) -> new TDSwordMenu(containerid, playerInventory, this, this.data),
+                        (containerid, playerInventory, player) -> new TDSwordMenu(containerid, playerInventory, this, itemHandler),
                         Component.translatable("menu.title.tdsword.tdswordmenu")
                 ));
                 TransDimensionalSword.LOGGER.info("Open");
@@ -109,10 +109,6 @@ public class TDSword extends Item {
         }
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
 
-    }
-    @Nullable
-    public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
-        return new TDSwordMenu(id ,inv, this, this.data);
     }
 
 

@@ -4,29 +4,34 @@ import com.beanfeed.tdsword.items.TDItems;
 import com.beanfeed.tdsword.items.TDSword;
 import com.beanfeed.tdsword.screen.TDMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class TDSwordMenu extends AbstractContainerMenu {
     public final TDSword sword;
     private final Level level;
-    private final ContainerData data;
+    private final ItemStackHandler itemHandler;
+    //private final ContainerData data;
 
     public TDSwordMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-        this(id, inv, inv.player.getMainHandItem().getItem(), new SimpleContainerData(2));
+        this(id, inv, (TDSword) inv.player.getMainHandItem().getItem(), new ItemStackHandler(3));
     }
 
-    public TDSwordMenu(int id, Inventory inv, Item item, ContainerData data) {
+    public TDSwordMenu(int id, Inventory inv, TDSword item, ItemStackHandler slots) {
         super(TDMenuTypes.TD_SWORD_MENU.get(), id);
         checkContainerSize(inv, 2);
-        this.sword = (TDSword) item;
+        this.sword = item;
         this.level = inv.player.level;
-        this.data = data;
+        this.itemHandler = slots;
+        //this.data = data;
         addPlayerHotbar(inv);
         addPlayerInventory(inv);
         addSwordSlots();
@@ -93,8 +98,7 @@ public class TDSwordMenu extends AbstractContainerMenu {
         }
     }
     private void addSwordSlots() {
-        this.addSlot(new Slot(sword.inv, 0,16, 19));
-        this.addSlot(new Slot(sword.inv, 1,35, 19));
-        new Slot(sword.inv, 4,2,2).
+        this.addSlot(new SlotItemHandler(itemHandler, 0,16, 19));
+        this.addSlot(new SlotItemHandler(itemHandler, 1,35, 19));
     }
 }
