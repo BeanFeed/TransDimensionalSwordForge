@@ -2,8 +2,11 @@ package com.beanfeed.tdsword;
 
 import com.beanfeed.tdsword.entity.TDEntity_Types;
 import com.beanfeed.tdsword.items.TDItems;
+import com.beanfeed.tdsword.screen.TDMenuTypes;
+import com.beanfeed.tdsword.screen.TDSwordGUI.TDSwordScreen;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
@@ -47,6 +50,7 @@ public class TransDimensionalSword {
 
         TDItems.register(modEventBus);
         TDEntity_Types.register(modEventBus);
+        TDMenuTypes.register(modEventBus);
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
@@ -75,7 +79,7 @@ public class TransDimensionalSword {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-
+            MenuScreens.register(TDMenuTypes.TD_SWORD_MENU.get(), TDSwordScreen::new);
         }
     }
 
