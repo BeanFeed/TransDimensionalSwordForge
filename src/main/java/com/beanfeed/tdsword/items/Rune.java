@@ -21,6 +21,7 @@ public class Rune extends Item {
     public Rune(Properties pProperties) {
         super(pProperties);
     }
+    /*
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if(pLevel.isClientSide() || !(pPlayer.getMainHandItem().getItem() instanceof Rune)) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
@@ -37,4 +38,6 @@ public class Rune extends Item {
         pPlayer.getMainHandItem().setHoverName(Component.translatable("item.tdsword.filled_rune"));
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
     }
+
+     */
 }

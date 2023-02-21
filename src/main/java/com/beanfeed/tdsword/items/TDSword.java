@@ -46,8 +46,6 @@ public class TDSword extends Item {
             @Override
             public int get(int pIndex) {
                 return switch (pIndex) {
-                    case 0 -> TDSword.this.lapisAmount;
-                    case 1 -> TDSword.this.goldAmount;
                     default -> 0;
                 };
             }
@@ -76,7 +74,13 @@ public class TDSword extends Item {
         BlockPos pos = NbtUtils.readBlockPos(nbt.getCompound("waypoint"));
         return PortalUitls.BlockPosToVec3(pos);
     }
-    public float getLastWaypointRotation() { return lastWaypointYRotation; }
+    public float getLastWaypointRotation(ItemStack stack) {
+        updateItemHandler(stack);
+        ItemStack rune = itemHandler.getStackInSlot(2);
+        CompoundTag nbt = rune.getOrCreateTag();
+        if(!nbt.contains("rotation")) return 0.0f;
+        return nbt.getFloat("rotation");
+    }
     public ResourceKey<Level> getLastDimension() { return lastDim; }
 
     //public SimpleContainer inv = new SimpleContainer(2);
@@ -118,10 +122,16 @@ public class TDSword extends Item {
         } else {
             lastDim = pLevel.dimension();
             var tempLastWaypoint = pPlayer.position();
-            lastWaypointYRotation = pPlayer.getYHeadRot();
+            var rotation = pPlayer.getYHeadRot();
             //TransDimensionalSword.LOGGER.info("Sword: " + tempLastWaypointRotation);
-            lastWaypoint = new Vec3(((int)tempLastWaypoint.x) + 0.5, tempLastWaypoint.y + 1, ((int)tempLastWaypoint.z) + 0.5);
-            //lastWaypointRotation = new Vec3(Math.round(tempLastWaypointRotation), 0, Math.round(tempLastWaypointRotation);
+            var waypoint = new BlockPos(((int)tempLastWaypoint.x) + 0.5, tempLastWaypoint.y + 1, ((int)tempLastWaypoint.z) + 0.5);
+            ItemStack itemStack = pPlayer.getMainHandItem();
+            CompoundTag nbt = itemStack.getOrCreateTag();
+            CompoundTag wypt = NbtUtils.writeBlockPos(waypoint);
+            nbt.put("waypoint", wypt);
+            nbt.putFloat("rotation", rotation);
+            itemStack.save(nbt);
+            //var rotation = new Vec3(Math.round(tempLastWaypointRotation), 0, Math.round(tempLastWaypointRotation);
 
         }
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));

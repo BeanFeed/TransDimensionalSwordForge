@@ -29,7 +29,7 @@ public class TDEvents {
             if(event.getItemStack().getItem() instanceof TDSword sword) {
                 //Do Code
                 TransDimensionalSword.LOGGER.info("Swung Sword");
-                Vec3 toGo = sword.getLastWaypoint();
+                Vec3 toGo = sword.getLastWaypoint(event.getItemStack());
                 //toGo != null checks if the sword has a saved waypoint. If not then don't run
                 //event.getEntity() != null double checks that the entity isn't null
                 //!event.getLevel().isClientSide() makes sure the code is only ran on the server
@@ -47,7 +47,7 @@ public class TDEvents {
                     };
 
                     //gets the players head rotation when they saved the waypoint
-                    var pRot = sword.getLastWaypointRotation();
+                    var pRot = sword.getLastWaypointRotation(event.getItemStack());
                     //gets the players current head rotation
                     var cRot = event.getEntity().getYHeadRot();
 
