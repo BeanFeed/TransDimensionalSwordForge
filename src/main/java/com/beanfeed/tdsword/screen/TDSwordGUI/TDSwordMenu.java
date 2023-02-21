@@ -89,20 +89,20 @@ public class TDSwordMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 68 + i * 18));
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 93 + i * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 126));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 151));
         }
     }
     private void addSwordSlots() {
-        this.addSlot(new SlotItemHandler(itemHandler, 0,62, 8));
-        this.addSlot(new SlotItemHandler(itemHandler, 1,80, 8));
-        this.addSlot(new SlotItemHandler(itemHandler, 2, 98, 8));
+        this.addSlot(new SlotItemHandler(itemHandler, 0,62, 33));
+        this.addSlot(new SlotItemHandler(itemHandler, 1,80, 33));
+        this.addSlot(new SlotItemHandler(itemHandler, 2, 98, 33));
     }
 
     @Override

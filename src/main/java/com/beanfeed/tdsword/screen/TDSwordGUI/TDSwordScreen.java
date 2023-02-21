@@ -14,10 +14,13 @@ public class TDSwordScreen extends AbstractContainerScreen<TDSwordMenu> {
     new ResourceLocation(TransDimensionalSword.MODID, "textures/gui/container/tdsmenu.png");
     public TDSwordScreen(TDSwordMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
-        this.imageHeight = 150;
+        this.imageHeight = 175;
         this.imageWidth = 176;
-        this.inventoryLabelY = 58;
-
+        this.inventoryLabelY = 83;
+        this.titleLabelY = 5;
+        TransDimensionalSword.LOGGER.info(pTitle.getString());
+        //int titleWidth = this.font.width(pTitle.getString());
+        //this.titleLabelX = (width - titleWidth)/2;
     }
     /*
     @Override
@@ -36,6 +39,14 @@ public class TDSwordScreen extends AbstractContainerScreen<TDSwordMenu> {
         this.blit(pPoseStack, x, y, 0, 0, imageWidth, imageHeight);
 
 
+    }
+    @Override
+    protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
+        int titleWidth = this.font.width(title.getString());
+        //TransDimensionalSword.LOGGER.info(String.valueOf(width));
+        this.titleLabelX = (imageWidth - titleWidth) / 2;
+        this.font.draw(pPoseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
+        this.font.draw(pPoseStack, this.playerInventoryTitle, (float)this.inventoryLabelX, (float)this.inventoryLabelY, 4210752);
     }
 
     @Override

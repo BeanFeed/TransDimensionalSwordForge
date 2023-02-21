@@ -86,7 +86,11 @@ public class TransDimensionalSword {
         public static void onClientSetup(FMLClientSetupEvent event) {
             MenuScreens.register(TDMenuTypes.TD_SWORD_MENU.get(), TDSwordScreen::new);
 
-
+            ItemProperties.register(TDItems.Rune.get(), new ResourceLocation("tdsword:nblank"), (pStack, clientLevel, entity, seed) -> {
+                CompoundTag nbt = pStack.getOrCreateTag();
+                if(nbt.contains("waypoint")) return 1;
+                return 0;
+            });
         }
     }
 
