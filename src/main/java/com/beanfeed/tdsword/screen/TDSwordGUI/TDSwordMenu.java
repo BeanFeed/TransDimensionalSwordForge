@@ -3,6 +3,7 @@ package com.beanfeed.tdsword.screen.TDSwordGUI;
 import com.beanfeed.tdsword.items.TDItems;
 import com.beanfeed.tdsword.items.TDSword;
 import com.beanfeed.tdsword.screen.TDMenuTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,21 +17,22 @@ import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class TDSwordMenu extends AbstractContainerMenu {
-    public final TDSword sword;
     private final Level level;
     private final ItemStackHandler itemHandler;
+    private final ItemStack itemStack;
     //private final ContainerData data;
 
     public TDSwordMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-        this(id, inv, (TDSword) inv.player.getMainHandItem().getItem(), new ItemStackHandler(3));
+        this(id, inv, inv.player.getMainHandItem(), new ItemStackHandler(3));
     }
 
-    public TDSwordMenu(int id, Inventory inv, TDSword item, ItemStackHandler slots) {
+    public TDSwordMenu(int id, Inventory inv, ItemStack itemStack, ItemStackHandler slots) {
         super(TDMenuTypes.TD_SWORD_MENU.get(), id);
         checkContainerSize(inv, 2);
-        this.sword = item;
+        //this.itemStack = itemStack;
         this.level = inv.player.level;
         this.itemHandler = slots;
+        this.itemStack = itemStack;
         //this.data = data;
         addPlayerHotbar(inv);
         addPlayerInventory(inv);
@@ -87,18 +89,26 @@ public class TDSwordMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 102 + i * 18));
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 68 + i * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 160));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 126));
         }
     }
     private void addSwordSlots() {
-        this.addSlot(new SlotItemHandler(itemHandler, 0,16, 19));
-        this.addSlot(new SlotItemHandler(itemHandler, 1,35, 19));
+        this.addSlot(new SlotItemHandler(itemHandler, 0,62, 8));
+        this.addSlot(new SlotItemHandler(itemHandler, 1,80, 8));
+        this.addSlot(new SlotItemHandler(itemHandler, 2, 98, 8));
+    }
+
+    @Override
+    public void removed(Player pPlayer) {
+        super.removed(pPlayer);
+        CompoundTag nbt = itemStack.getOrCreateTag();
+        nbt.put("inventory", itemHandler.serializeNBT());
     }
 }

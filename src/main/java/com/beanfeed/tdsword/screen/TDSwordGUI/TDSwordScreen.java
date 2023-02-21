@@ -11,11 +11,13 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class TDSwordScreen extends AbstractContainerScreen<TDSwordMenu> {
     private static final ResourceLocation TEXTURE =
-    new ResourceLocation(TransDimensionalSword.MODID, "textures/gui/tdsmenu.png");
+    new ResourceLocation(TransDimensionalSword.MODID, "textures/gui/container/tdsmenu.png");
     public TDSwordScreen(TDSwordMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
-        this.imageHeight = 184;
-        this.inventoryLabelY = 92;
+        this.imageHeight = 150;
+        this.imageWidth = 176;
+        this.inventoryLabelY = 58;
+
     }
     /*
     @Override

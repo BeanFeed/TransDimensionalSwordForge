@@ -91,9 +91,16 @@ public class TDSword extends Item {
                 }
             }
             */
+            ItemStack stack = pPlayer.getMainHandItem();
+            CompoundTag nbt = stack.getOrCreateTag();
+            CompoundTag storedItemNBT = new CompoundTag();
+            if(!nbt.contains("inventory")) {
+                nbt.put("inventory", storedItemNBT);
+            }
+            itemHandler.deserializeNBT(nbt.getCompound("inventory"));
             if(!pPlayer.level.isClientSide()) {
                 pPlayer.openMenu(new SimpleMenuProvider(
-                        (containerid, playerInventory, player) -> new TDSwordMenu(containerid, playerInventory, this, itemHandler),
+                        (containerid, playerInventory, player) -> new TDSwordMenu(containerid, playerInventory, playerInventory.player.getMainHandItem(), itemHandler),
                         Component.translatable("menu.title.tdsword.tdswordmenu")
                 ));
                 TransDimensionalSword.LOGGER.info("Open");
