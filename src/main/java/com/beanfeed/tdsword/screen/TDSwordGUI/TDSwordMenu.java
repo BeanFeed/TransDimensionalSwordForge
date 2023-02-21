@@ -2,6 +2,9 @@ package com.beanfeed.tdsword.screen.TDSwordGUI;
 
 import com.beanfeed.tdsword.items.TDItems;
 import com.beanfeed.tdsword.items.TDSword;
+import com.beanfeed.tdsword.screen.SlotHandler.TDSMGoldHandler;
+import com.beanfeed.tdsword.screen.SlotHandler.TDSMLapisHandler;
+import com.beanfeed.tdsword.screen.SlotHandler.TDSMRuneHandler;
 import com.beanfeed.tdsword.screen.TDMenuTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -100,9 +103,9 @@ public class TDSwordMenu extends AbstractContainerMenu {
         }
     }
     private void addSwordSlots() {
-        this.addSlot(new SlotItemHandler(itemHandler, 0,62, 33));
-        this.addSlot(new SlotItemHandler(itemHandler, 1,80, 33));
-        this.addSlot(new SlotItemHandler(itemHandler, 2, 98, 33));
+        this.addSlot(new TDSMGoldHandler(itemHandler, 0,62, 33));
+        this.addSlot(new TDSMLapisHandler(itemHandler, 1,80, 33));
+        this.addSlot(new TDSMRuneHandler(itemHandler, 2, 98, 33));
     }
 
     @Override

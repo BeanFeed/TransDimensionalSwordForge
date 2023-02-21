@@ -1,9 +1,12 @@
 package com.beanfeed.tdsword.items;
 
+import com.beanfeed.tdsword.PortalUitls;
 import com.beanfeed.tdsword.TransDimensionalSword;
 import com.beanfeed.tdsword.screen.TDSwordGUI.TDSwordMenu;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -65,7 +68,14 @@ public class TDSword extends Item {
     }
 
     //Returns saved waypoint
-    public Vec3 getLastWaypoint() { return lastWaypoint; }
+    public Vec3 getLastWaypoint(ItemStack stack) {
+        updateItemHandler(stack);
+        ItemStack rune = itemHandler.getStackInSlot(2);
+        CompoundTag nbt = rune.getOrCreateTag();
+        if(!nbt.contains("waypoint")) return null;
+        BlockPos pos = NbtUtils.readBlockPos(nbt.getCompound("waypoint"));
+        return PortalUitls.BlockPosToVec3(pos);
+    }
     public float getLastWaypointRotation() { return lastWaypointYRotation; }
     public ResourceKey<Level> getLastDimension() { return lastDim; }
 
@@ -74,7 +84,7 @@ public class TDSword extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         //TransDimensionalSword.LOGGER.info(pUsedHand.toString());
-        if(!pPlayer.isCrouching() && (pPlayer.getOffhandItem().is(Items.LAPIS_LAZULI) || pPlayer.getOffhandItem().is(Items.GOLD_INGOT)))
+        if(!pPlayer.isCrouching())
         {
             /*
             if(pPlayer.getOffhandItem().is(Items.LAPIS_LAZULI)) {
@@ -117,6 +127,9 @@ public class TDSword extends Item {
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
 
     }
-
+    private void updateItemHandler(ItemStack stack) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        itemHandler.deserializeNBT(nbt.getCompound("inventory"));
+    }
 
 }

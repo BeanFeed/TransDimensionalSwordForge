@@ -2,6 +2,7 @@ package com.beanfeed.tdsword;
 
 import com.beanfeed.tdsword.entity.TDEntity_Types;
 import com.beanfeed.tdsword.entity.TemporaryPortal;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
@@ -80,5 +81,9 @@ public class PortalUitls {
             e.remove(Entity.RemovalReason.KILLED);
             //informer.accept(e);
         });
+    }
+
+    public static Vec3 BlockPosToVec3(BlockPos blockPos) {
+        return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 }
