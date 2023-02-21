@@ -127,6 +127,7 @@ public class TDSword extends Item {
             var waypoint = new BlockPos(((int)tempLastWaypoint.x) + 0.5, tempLastWaypoint.y + 1, ((int)tempLastWaypoint.z) + 0.5);
             ItemStack itemStack = pPlayer.getMainHandItem();
             CompoundTag nbt = itemStack.getOrCreateTag();
+            if(nbt.contains("waypoint")) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
             CompoundTag wypt = NbtUtils.writeBlockPos(waypoint);
             nbt.put("waypoint", wypt);
             nbt.putFloat("rotation", rotation);
