@@ -70,6 +70,7 @@ public class TDSword extends Item {
         updateItemHandler(stack);
         ItemStack rune = itemHandler.getStackInSlot(2);
         CompoundTag nbt = rune.getOrCreateTag();
+        TransDimensionalSword.LOGGER.info(String.valueOf(rune));
         if(!nbt.contains("waypoint")) return null;
         BlockPos pos = NbtUtils.readBlockPos(nbt.getCompound("waypoint"));
         return PortalUitls.BlockPosToVec3(pos);
@@ -87,6 +88,7 @@ public class TDSword extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+        if(pLevel.isClientSide()) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
         //TransDimensionalSword.LOGGER.info(pUsedHand.toString());
         if(!pPlayer.isCrouching())
         {
@@ -127,7 +129,8 @@ public class TDSword extends Item {
             var waypoint = new BlockPos(((int)tempLastWaypoint.x) + 0.5, tempLastWaypoint.y + 1, ((int)tempLastWaypoint.z) + 0.5);
             ItemStack itemStack = pPlayer.getMainHandItem();
             CompoundTag nbt = itemStack.getOrCreateTag();
-            if(nbt.contains("waypoint")) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
+            TransDimensionalSword.LOGGER.info(String.valueOf(nbt.get("waypoint")));
+            if(nbt.contains("waypoint")) { TransDimensionalSword.LOGGER.info(" waypoint"); return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand)); }
             CompoundTag wypt = NbtUtils.writeBlockPos(waypoint);
             nbt.put("waypoint", wypt);
             nbt.putFloat("rotation", rotation);

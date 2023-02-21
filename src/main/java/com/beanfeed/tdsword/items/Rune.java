@@ -21,7 +21,7 @@ public class Rune extends Item {
     public Rune(Properties pProperties) {
         super(pProperties);
     }
-    /*
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if(pLevel.isClientSide() || !(pPlayer.getMainHandItem().getItem() instanceof Rune)) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
@@ -31,6 +31,7 @@ public class Rune extends Item {
         CompoundTag waypoint = NbtUtils.writeBlockPos(pPos);
         //CompoundTag rotation = new CompoundTag();
         nbt.put("waypoint", waypoint);
+        pLevel.
         nbt.putFloat("rotation", pPlayer.getYHeadRot());
         pPlayer.getMainHandItem().save(nbt);
         TransDimensionalSword.LOGGER.info("added");
@@ -39,5 +40,5 @@ public class Rune extends Item {
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
     }
 
-     */
+
 }
