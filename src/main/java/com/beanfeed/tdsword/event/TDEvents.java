@@ -48,7 +48,7 @@ public class TDEvents {
 
                     //gets the players head rotation when they saved the waypoint
                     var pRot = sword.getLastWaypointRotation(event.getItemStack());
-                    if(pRot == null) return;
+                    //if(pRot == null) return;
                     //gets the players current head rotation
                     var cRot = event.getEntity().getYHeadRot();
 
