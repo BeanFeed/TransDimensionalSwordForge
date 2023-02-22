@@ -18,7 +18,6 @@ public class TDSwordScreen extends AbstractContainerScreen<TDSwordMenu> {
         this.imageWidth = 176;
         this.inventoryLabelY = 83;
         this.titleLabelY = 5;
-        TransDimensionalSword.LOGGER.info(pTitle.getString());
         //int titleWidth = this.font.width(pTitle.getString());
         //this.titleLabelX = (width - titleWidth)/2;
     }

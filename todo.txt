@@ -1,0 +1,7 @@
+Make portals not spawn on sides of blocks.
+Fix shift clicking between tds slots and inventory slots
+make particles spawn when portal is used
+make crafting recipes
+add tooltips to slots in tdsmenu
+add a separate menu for sword for when it is not activated (slot to activate with nether star)
+add a separate texture for when sword is not activated

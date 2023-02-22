@@ -1,32 +1,26 @@
 package com.beanfeed.tdsword.items;
 
-import com.beanfeed.tdsword.PortalUitls;
 import com.beanfeed.tdsword.TransDimensionalSword;
+import com.beanfeed.tdsword.Utils;
 import com.beanfeed.tdsword.screen.TDSwordGUI.TDSwordMenu;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.NetworkHooks;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class TDSword extends Item {
@@ -70,10 +64,10 @@ public class TDSword extends Item {
         updateItemHandler(stack);
         ItemStack rune = itemHandler.getStackInSlot(2);
         CompoundTag nbt = rune.getOrCreateTag();
-        TransDimensionalSword.LOGGER.info(String.valueOf(rune));
+        //TransDimensionalSword.LOGGER.info(String.valueOf(rune));
         if(!nbt.contains("waypoint")) return null;
         BlockPos pos = NbtUtils.readBlockPos(nbt.getCompound("waypoint"));
-        return PortalUitls.BlockPosToVec3(pos);
+        return Utils.BlockPosToVec3(pos);
     }
     public float getLastWaypointRotation(ItemStack stack) {
         updateItemHandler(stack);
@@ -82,8 +76,23 @@ public class TDSword extends Item {
         if(!nbt.contains("rotation")) return 0.0f;
         return nbt.getFloat("rotation");
     }
-    public ResourceKey<Level> getLastDimension() { return lastDim; }
-
+    public ResourceKey<Level> getLastDimension(ItemStack stack) {
+        updateItemHandler(stack);
+        ItemStack rune = itemHandler.getStackInSlot(2);
+        CompoundTag nbt = rune.getOrCreateTag();
+        if(!nbt.contains("dimension")) return null;
+        ResourceLocation keyLocation = ResourceLocation.tryParse(nbt.getString("dimension"));
+        return ResourceKey.create(Registry.DIMENSION_REGISTRY, keyLocation);
+    }
+    public int getGoldAmount(ItemStack stack) {
+        updateItemHandler(stack);
+        return itemHandler.getStackInSlot(0).getCount();
+    }
+    public void setGoldAmount(ItemStack stack, int amount) {
+        updateItemHandler(stack);
+        itemHandler.getStackInSlot(0).setCount(amount);
+        stack.getOrCreateTag().put("inventory", itemHandler.serializeNBT());
+    }
     //public SimpleContainer inv = new SimpleContainer(2);
 
     @Override
@@ -119,22 +128,18 @@ public class TDSword extends Item {
                         (containerid, playerInventory, player) -> new TDSwordMenu(containerid, playerInventory, playerInventory.player.getMainHandItem(), itemHandler),
                         Component.translatable("menu.title.tdsword.tdswordmenu")
                 ));
-                TransDimensionalSword.LOGGER.info("Open");
+                //TransDimensionalSword.LOGGER.info("Open");
             }
         } else {
-            lastDim = pLevel.dimension();
-            var tempLastWaypoint = pPlayer.position();
-            var rotation = pPlayer.getYHeadRot();
-            //TransDimensionalSword.LOGGER.info("Sword: " + tempLastWaypointRotation);
-            var waypoint = new BlockPos(((int)tempLastWaypoint.x) + 0.5, tempLastWaypoint.y + 1, ((int)tempLastWaypoint.z) + 0.5);
-            ItemStack itemStack = pPlayer.getMainHandItem();
-            CompoundTag nbt = itemStack.getOrCreateTag();
-            TransDimensionalSword.LOGGER.info(String.valueOf(nbt.get("waypoint")));
-            if(nbt.contains("waypoint")) { TransDimensionalSword.LOGGER.info(" waypoint"); return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand)); }
-            CompoundTag wypt = NbtUtils.writeBlockPos(waypoint);
-            nbt.put("waypoint", wypt);
-            nbt.putFloat("rotation", rotation);
-            itemStack.save(nbt);
+            updateItemHandler(pPlayer.getMainHandItem());
+            ItemStack lapisStack = itemHandler.getStackInSlot(1);
+            if(lapisStack.getCount() == 0) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
+            ItemStack itemStack = itemHandler.getStackInSlot(2);
+            TransDimensionalSword.LOGGER.info(String.valueOf(Rune.getWaypointNBT(itemStack, pPlayer)));
+            lapisStack.shrink(1);
+            itemStack.save(Rune.getWaypointNBT(itemStack, pPlayer));
+            CompoundTag nbt = pPlayer.getMainHandItem().getOrCreateTag();
+            nbt.put("inventory", itemHandler.serializeNBT());
             //var rotation = new Vec3(Math.round(tempLastWaypointRotation), 0, Math.round(tempLastWaypointRotation);
 
         }

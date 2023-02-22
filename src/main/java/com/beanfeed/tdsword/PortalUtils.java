@@ -2,7 +2,6 @@ package com.beanfeed.tdsword;
 
 import com.beanfeed.tdsword.entity.TDEntity_Types;
 import com.beanfeed.tdsword.entity.TemporaryPortal;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
@@ -12,7 +11,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import qouteall.imm_ptl.core.IPMcHelper;
-import qouteall.imm_ptl.core.platform_specific.IPRegistry;
 import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.imm_ptl.core.portal.PortalManipulation;
 import qouteall.q_misc_util.Helper;
@@ -21,12 +19,11 @@ import qouteall.q_misc_util.MiscHelper;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static qouteall.imm_ptl.core.portal.PortalManipulation.getPortalCluster;
 
-public class PortalUitls {
+public class PortalUtils {
 
     public static TemporaryPortal makeTempPortal(double width, double height, Entity entity) {
         Vec3 playerLook = entity.getLookAngle();
@@ -83,10 +80,5 @@ public class PortalUitls {
         });
     }
 
-    public static Vec3 BlockPosToVec3(BlockPos blockPos) {
-        return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-    }
-    public static BlockPos Vec3ToBlockPos(Vec3 vec) {
-        return new BlockPos(vec.x(), vec.y(), vec.z());
-    }
+
 }
