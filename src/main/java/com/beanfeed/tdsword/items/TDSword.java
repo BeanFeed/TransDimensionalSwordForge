@@ -138,6 +138,7 @@ public class TDSword extends Item {
             TransDimensionalSword.LOGGER.info(String.valueOf(Rune.getWaypointNBT(itemStack, pPlayer)));
             lapisStack.shrink(1);
             itemStack.save(Rune.getWaypointNBT(itemStack, pPlayer));
+            itemStack.setHoverName(Component.translatable("item.tdsword.filled_rune"));
             CompoundTag nbt = pPlayer.getMainHandItem().getOrCreateTag();
             nbt.put("inventory", itemHandler.serializeNBT());
             //var rotation = new Vec3(Math.round(tempLastWaypointRotation), 0, Math.round(tempLastWaypointRotation);
