@@ -4,4 +4,3 @@ make crafting recipes
 add tooltips to slots in tdsmenu
 add a separate menu for sword for when it is not activated (slot to activate with nether star)
 add a separate texture for when sword is not activated
-make portals animated when they open
