@@ -1,3 +1,2 @@
-Fix shift clicking between tds slots and inventory slots
 make particles spawn when portal is used
 make crafting recipes
