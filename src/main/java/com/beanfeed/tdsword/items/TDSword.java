@@ -3,6 +3,7 @@ package com.beanfeed.tdsword.items;
 import com.beanfeed.tdsword.TransDimensionalSword;
 import com.beanfeed.tdsword.Utils;
 import com.beanfeed.tdsword.screen.TDSwordGUI.TDSwordMenu;
+import com.beanfeed.tdsword.sound.TDSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -10,6 +11,8 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
@@ -116,8 +119,9 @@ public class TDSword extends Item {
         isActivated = nbt.getBoolean("active");
     }
     //public SimpleContainer inv = new SimpleContainer(2);
-    private void setActivated(int value) {
-        isActivated = value == 1;
+    private void setActivated(ItemStack stack, boolean value) {
+        isActivated = value;
+        stack.getOrCreateTag().putBoolean("active", value);
     }
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
@@ -170,16 +174,18 @@ public class TDSword extends Item {
 
         }else {
             updateItemHandler(pPlayer.getItemInHand(pUsedHand));
+            updateActive(pPlayer.getItemInHand(pUsedHand));
             ItemStack stack = itemHandler.getStackInSlot(0);
             TransDimensionalSword.LOGGER.info("Check Activate");
-            TransDimensionalSword.LOGGER.info(String.valueOf(stack.getCount() == 0));
+            //TransDimensionalSword.LOGGER.info(String.valueOf(stack.getCount() == 0));
             if(stack.getCount() == 0) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
             else {
-                isActivated = true;
-                CompoundTag nbt = stack.getOrCreateTag();
-                nbt.putBoolean("active", isActivated);
-                stack.save(nbt);
-                TransDimensionalSword.LOGGER.info(String.valueOf(isActivated(stack)));
+                setActivated(pPlayer.getItemInHand(pUsedHand), true);
+                itemHandler.setStackInSlot(0, ItemStack.EMPTY);
+                CompoundTag nbt = pPlayer.getItemInHand(pUsedHand).getOrCreateTag();
+                nbt.put("inventory", itemHandler.serializeNBT());
+                pPlayer.level.playSound(null, Utils.Vec3ToBlockPos(pPlayer.position()), new SoundEvent(TDSounds.TD_IGNITE.getId()), SoundSource.PLAYERS, 1f, 1f);
+                //TransDimensionalSword.LOGGER.info(String.valueOf(isActivated(stack)));
             }
 
         }

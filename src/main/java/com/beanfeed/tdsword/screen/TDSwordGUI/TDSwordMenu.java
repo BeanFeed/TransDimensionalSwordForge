@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 public class TDSwordMenu extends AbstractContainerMenu {
     private final Level level;
     private final ItemStackHandler itemHandler;
-    private final TDSItemStackHandler tdsitemHandler= new TDSItemStackHandler(1);
+    private final TDSItemStackHandler tdsitemHandler= new TDSItemStackHandler(3);
     private final ItemStack itemStack;
     public final boolean isActivated;
     //private final ContainerData data;
@@ -39,11 +40,13 @@ public class TDSwordMenu extends AbstractContainerMenu {
         checkContainerSize(inv, 2);
         //this.itemStack = itemStack;
         this.level = inv.player.level;
-        if(slots.getSlots() == 1) {
+        if(slots.getStackInSlot(0).is(Items.GHAST_TEAR)) {
             this.tdsitemHandler.setStackInSlot(0,slots.getStackInSlot(0));
         }
         this.itemHandler = slots;
         this.itemStack = itemStack;
+        TransDimensionalSword.LOGGER.info("Does sword contain Active key: " + String.valueOf(itemStack.getOrCreateTag().contains("active")));
+        TransDimensionalSword.LOGGER.info("Key value: " + String.valueOf(itemStack.getOrCreateTag().getBoolean("active")));
         this.isActivated = itemStack.getOrCreateTag().contains("active") && itemStack.getOrCreateTag().getBoolean("active");
 
         //this.data = data;

@@ -4,6 +4,7 @@ import com.beanfeed.tdsword.entity.TDEntity_Types;
 import com.beanfeed.tdsword.items.TDItems;
 import com.beanfeed.tdsword.screen.TDMenuTypes;
 import com.beanfeed.tdsword.screen.TDSwordGUI.TDSwordScreen;
+import com.beanfeed.tdsword.sound.TDSounds;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -32,6 +34,7 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -54,6 +57,7 @@ public class TransDimensionalSword {
         TDItems.register(modEventBus);
         TDEntity_Types.register(modEventBus);
         TDMenuTypes.register(modEventBus);
+        TDSounds.register(modEventBus);
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
@@ -91,6 +95,11 @@ public class TransDimensionalSword {
                 if(nbt.contains("waypoint")) return 1;
                 return 0;
             });
+            ItemProperties.register(TDItems.TDSword.get(), new ResourceLocation("tdsword:tdsunlit"), (pStack, clientLevel, entity, seed) -> {
+                CompoundTag nbt = pStack.getOrCreateTag();
+                if(nbt.contains("active") && nbt.getBoolean("active")) return 0;
+                return 1;
+            });
         }
     }
 
@@ -104,5 +113,5 @@ public class TransDimensionalSword {
                 entityType -> event.registerEntityRenderer(entityType, (EntityRendererProvider) PortalEntityRenderer::new
                 ));
     }
-    
+
 }
