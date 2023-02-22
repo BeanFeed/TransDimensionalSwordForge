@@ -26,37 +26,43 @@ import java.util.List;
 public class TDSword extends Item {
     private final ItemStackHandler itemHandler = new ItemStackHandler(3);
     private Vec3 lastWaypoint = null;
+    private boolean isActivated = false;
     private int lapisSlot = 0;
     private int lapisAmount = 0;
     private int goldSlot = 1;
     private int goldAmount = 0;
-    protected final ContainerData data;
+    //protected final ContainerData data;
     private List<Vec3> Waypoints;
     private float lastWaypointYRotation = 0.0f;
     private ResourceKey<Level> lastDim = null;
     public TDSword(Properties pProperties) {
         super(pProperties);
+        /*
         this.data = new ContainerData() {
             @Override
             public int get(int pIndex) {
                 return switch (pIndex) {
-                    default -> 0;
+                    default -> {
+                        if(isActivated) yield 1;
+                        yield 0;
+                    }
                 };
             }
 
             @Override
             public void set(int pIndex, int pValue) {
                 switch (pIndex) {
-                    case 0 -> TDSword.this.lapisAmount = pValue;
-                    case 1 -> TDSword.this.goldAmount = pValue;
+                    case 0 -> TDSword.this.setActivated(pValue);
                 }
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 1;
             }
         };
+
+         */
     }
 
     //Returns saved waypoint
@@ -93,12 +99,31 @@ public class TDSword extends Item {
         itemHandler.getStackInSlot(0).setCount(amount);
         stack.getOrCreateTag().put("inventory", itemHandler.serializeNBT());
     }
+    public boolean isActivated(ItemStack stack) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        if(!nbt.contains("active")) {
+            nbt.putBoolean("active", false);
+            return false;
+        }
+        return nbt.getBoolean("active");
+    }
+    private void updateActive(ItemStack stack) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        if(!nbt.contains("active")) {
+            nbt.putBoolean("active", false);
+            isActivated = false;
+        }
+        isActivated = nbt.getBoolean("active");
+    }
     //public SimpleContainer inv = new SimpleContainer(2);
-
+    private void setActivated(int value) {
+        isActivated = value == 1;
+    }
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if(pLevel.isClientSide()) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
         //TransDimensionalSword.LOGGER.info(pUsedHand.toString());
+        updateActive(pPlayer.getItemInHand(pUsedHand));
         if(!pPlayer.isCrouching())
         {
             /*
@@ -116,7 +141,7 @@ public class TDSword extends Item {
                 }
             }
             */
-            ItemStack stack = pPlayer.getMainHandItem();
+            ItemStack stack = pPlayer.getItemInHand(pUsedHand);
             CompoundTag nbt = stack.getOrCreateTag();
             CompoundTag storedItemNBT = new CompoundTag();
             if(!nbt.contains("inventory")) {
@@ -125,13 +150,13 @@ public class TDSword extends Item {
             itemHandler.deserializeNBT(nbt.getCompound("inventory"));
             if(!pPlayer.level.isClientSide()) {
                 pPlayer.openMenu(new SimpleMenuProvider(
-                        (containerid, playerInventory, player) -> new TDSwordMenu(containerid, playerInventory, playerInventory.player.getMainHandItem(), itemHandler),
+                        (containerid, playerInventory, player) -> new TDSwordMenu(containerid, playerInventory, playerInventory.player.getItemInHand(pUsedHand), itemHandler),
                         Component.translatable("menu.title.tdsword.tdswordmenu")
                 ));
                 //TransDimensionalSword.LOGGER.info("Open");
             }
-        } else {
-            updateItemHandler(pPlayer.getMainHandItem());
+        } else if(isActivated){
+            updateItemHandler(pPlayer.getItemInHand(pUsedHand));
             ItemStack lapisStack = itemHandler.getStackInSlot(1);
             if(lapisStack.getCount() == 0) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
             ItemStack itemStack = itemHandler.getStackInSlot(2);
@@ -139,9 +164,23 @@ public class TDSword extends Item {
             lapisStack.shrink(1);
             itemStack.save(Rune.getWaypointNBT(itemStack, pPlayer));
             itemStack.setHoverName(Component.translatable("item.tdsword.filled_rune"));
-            CompoundTag nbt = pPlayer.getMainHandItem().getOrCreateTag();
+            CompoundTag nbt = pPlayer.getItemInHand(pUsedHand).getOrCreateTag();
             nbt.put("inventory", itemHandler.serializeNBT());
             //var rotation = new Vec3(Math.round(tempLastWaypointRotation), 0, Math.round(tempLastWaypointRotation);
+
+        }else {
+            updateItemHandler(pPlayer.getItemInHand(pUsedHand));
+            ItemStack stack = itemHandler.getStackInSlot(0);
+            TransDimensionalSword.LOGGER.info("Check Activate");
+            TransDimensionalSword.LOGGER.info(String.valueOf(stack.getCount() == 0));
+            if(stack.getCount() == 0) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
+            else {
+                isActivated = true;
+                CompoundTag nbt = stack.getOrCreateTag();
+                nbt.putBoolean("active", isActivated);
+                stack.save(nbt);
+                TransDimensionalSword.LOGGER.info(String.valueOf(isActivated(stack)));
+            }
 
         }
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));

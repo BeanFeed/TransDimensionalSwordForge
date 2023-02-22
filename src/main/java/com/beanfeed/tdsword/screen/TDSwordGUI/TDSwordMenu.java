@@ -1,11 +1,14 @@
 package com.beanfeed.tdsword.screen.TDSwordGUI;
 
+import com.beanfeed.tdsword.TransDimensionalSword;
 import com.beanfeed.tdsword.items.TDItems;
 import com.beanfeed.tdsword.items.TDSword;
 import com.beanfeed.tdsword.screen.SlotHandler.TDSMGoldHandler;
 import com.beanfeed.tdsword.screen.SlotHandler.TDSMLapisHandler;
 import com.beanfeed.tdsword.screen.SlotHandler.TDSMRuneHandler;
+import com.beanfeed.tdsword.screen.SlotHandler.TDSMTearHandler;
 import com.beanfeed.tdsword.screen.TDMenuTypes;
+import com.beanfeed.tdsword.screen.TDSwordGUI.GuiElement.TDSItemStackHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -22,7 +25,9 @@ import org.jetbrains.annotations.Nullable;
 public class TDSwordMenu extends AbstractContainerMenu {
     private final Level level;
     private final ItemStackHandler itemHandler;
+    private final TDSItemStackHandler tdsitemHandler= new TDSItemStackHandler(1);
     private final ItemStack itemStack;
+    public final boolean isActivated;
     //private final ContainerData data;
 
     public TDSwordMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
@@ -34,8 +39,13 @@ public class TDSwordMenu extends AbstractContainerMenu {
         checkContainerSize(inv, 2);
         //this.itemStack = itemStack;
         this.level = inv.player.level;
+        if(slots.getSlots() == 1) {
+            this.tdsitemHandler.setStackInSlot(0,slots.getStackInSlot(0));
+        }
         this.itemHandler = slots;
         this.itemStack = itemStack;
+        this.isActivated = itemStack.getOrCreateTag().contains("active") && itemStack.getOrCreateTag().getBoolean("active");
+
         //this.data = data;
         addPlayerHotbar(inv);
         addPlayerInventory(inv);
@@ -103,15 +113,23 @@ public class TDSwordMenu extends AbstractContainerMenu {
         }
     }
     private void addSwordSlots() {
-        this.addSlot(new TDSMGoldHandler(itemHandler, 0,62, 33));
-        this.addSlot(new TDSMLapisHandler(itemHandler, 1,80, 33));
-        this.addSlot(new TDSMRuneHandler(itemHandler, 2, 98, 33));
+        if(this.isActivated)
+        {
+            this.addSlot(new TDSMGoldHandler(itemHandler, 0,62, 33));
+            this.addSlot(new TDSMLapisHandler(itemHandler, 1,80, 33));
+            this.addSlot(new TDSMRuneHandler(itemHandler, 2, 98, 33));
+        }
+        else {
+            this.addSlot(new TDSMTearHandler(tdsitemHandler, 0,80, 33));
+
+        }
     }
 
     @Override
     public void removed(Player pPlayer) {
         super.removed(pPlayer);
         CompoundTag nbt = itemStack.getOrCreateTag();
-        nbt.put("inventory", itemHandler.serializeNBT());
+        if(isActivated) nbt.put("inventory", itemHandler.serializeNBT());
+        else nbt.put("inventory", tdsitemHandler.serializeNBT());
     }
 }

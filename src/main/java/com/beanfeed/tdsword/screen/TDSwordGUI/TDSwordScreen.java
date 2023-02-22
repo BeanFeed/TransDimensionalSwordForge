@@ -10,14 +10,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class TDSwordScreen extends AbstractContainerScreen<TDSwordMenu> {
-    private static final ResourceLocation TEXTURE =
+    private static final ResourceLocation MAIN_TEXTURE =
     new ResourceLocation(TransDimensionalSword.MODID, "textures/gui/container/tdsmenu.png");
+    private static final ResourceLocation ACTIVATE_TEXTURE =
+    new ResourceLocation(TransDimensionalSword.MODID, "textures/gui/container/tdsactivate.png");
+    private final boolean isActivated;
     public TDSwordScreen(TDSwordMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.imageHeight = 175;
         this.imageWidth = 176;
         this.inventoryLabelY = 83;
         this.titleLabelY = 5;
+        this.isActivated = pMenu.isActivated;
         //int titleWidth = this.font.width(pTitle.getString());
         //this.titleLabelX = (width - titleWidth)/2;
     }
@@ -31,7 +35,8 @@ public class TDSwordScreen extends AbstractContainerScreen<TDSwordMenu> {
     protected void renderBg(PoseStack pPoseStack, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+        if(isActivated) RenderSystem.setShaderTexture(0, MAIN_TEXTURE);
+        else RenderSystem.setShaderTexture(0, ACTIVATE_TEXTURE);
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
@@ -42,9 +47,14 @@ public class TDSwordScreen extends AbstractContainerScreen<TDSwordMenu> {
     @Override
     protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
         int titleWidth = this.font.width(title.getString());
+        Component nTitle = Component.translatable("menu.title.tdsword.alttdsmenu");
+        if(!isActivated) {
+            titleWidth = this.font.width(nTitle.getString());
+        }
         //TransDimensionalSword.LOGGER.info(String.valueOf(width));
         this.titleLabelX = (imageWidth - titleWidth) / 2;
-        this.font.draw(pPoseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
+        if(!isActivated) this.font.draw(pPoseStack, nTitle, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
+        else this.font.draw(pPoseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
         this.font.draw(pPoseStack, this.playerInventoryTitle, (float)this.inventoryLabelX, (float)this.inventoryLabelY, 4210752);
     }
 
