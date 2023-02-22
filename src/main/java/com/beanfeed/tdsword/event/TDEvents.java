@@ -7,6 +7,7 @@ import com.beanfeed.tdsword.items.TDSword;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,8 +31,9 @@ public class TDEvents {
                 //event.getEntity() != null double checks that the entity isn't null
                 //!event.getLevel().isClientSide() makes sure the code is only ran on the server
                 if(sword.getGoldAmount(event.getItemStack()) == 0) return;
-                if(toGo != null && event.getEntity() != null && !event.getLevel().isClientSide()) {
+                if(toGo != null && event.getEntity() != null && !event.getLevel().isClientSide() && event.getFace() == Direction.UP) {
                     //gets block to spawn portal on top of
+
                     BlockPos orgtoSpawn = event.getPos();
                     Vec3 toSpawn = new Vec3(orgtoSpawn.getX(), orgtoSpawn.getY(), orgtoSpawn.getZ());
                     //makes new portal object with dimensions
@@ -71,9 +73,10 @@ public class TDEvents {
                     PortalUtils.completeBiWayPortal(portal);
                     var goldAmount = sword.getGoldAmount(event.getItemStack());
                     sword.setGoldAmount(event.getItemStack(), goldAmount - 1);
+                    event.setCanceled(true);
                 }
                 //Cancels the event, so it doesn't break the block in creative mode
-                event.setCanceled(true);
+
             }
         }
     }
