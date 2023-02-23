@@ -2,6 +2,7 @@ package com.beanfeed.tdsword;
 
 import com.beanfeed.tdsword.entity.TDEntity_Types;
 import com.beanfeed.tdsword.items.TDItems;
+import com.beanfeed.tdsword.particle.TDParticles;
 import com.beanfeed.tdsword.screen.TDMenuTypes;
 import com.beanfeed.tdsword.screen.TDSwordGUI.TDSwordScreen;
 import com.beanfeed.tdsword.sound.TDSounds;
@@ -58,6 +59,7 @@ public class TransDimensionalSword {
         TDEntity_Types.register(modEventBus);
         TDMenuTypes.register(modEventBus);
         TDSounds.register(modEventBus);
+        TDParticles.register(modEventBus);
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 

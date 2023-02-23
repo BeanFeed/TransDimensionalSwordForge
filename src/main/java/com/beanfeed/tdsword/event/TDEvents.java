@@ -4,11 +4,17 @@ import com.beanfeed.tdsword.PortalUtils;
 import com.beanfeed.tdsword.TransDimensionalSword;
 import com.beanfeed.tdsword.entity.TemporaryPortal;
 import com.beanfeed.tdsword.items.TDSword;
+import com.beanfeed.tdsword.particle.PortalBorderParticle;
+import com.beanfeed.tdsword.particle.TDParticles;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -19,7 +25,7 @@ public class TDEvents {
 
 
     @Mod.EventBusSubscriber(modid = TransDimensionalSword.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-    public static class ModEventBusEvents {
+    public static class ForgeModEventBusEvents {
         @SubscribeEvent
         public static void LeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
             if(event.getItemStack().getItem() instanceof TDSword sword) {
@@ -78,6 +84,15 @@ public class TDEvents {
                 //Cancels the event, so it doesn't break the block in creative mode
 
             }
+        }
+    }
+
+    @Mod.EventBusSubscriber(modid = TransDimensionalSword.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public class ModEventBusEvents {
+
+        @SubscribeEvent
+        public static void RegisterParticleProvidersEvent(final RegisterParticleProvidersEvent event) {
+            Minecraft.getInstance().particleEngine.register(TDParticles.PORTAL_BORDER.get(), PortalBorderParticle.Factory::new);
         }
     }
 
