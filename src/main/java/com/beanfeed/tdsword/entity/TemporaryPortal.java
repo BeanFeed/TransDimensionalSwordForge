@@ -12,6 +12,7 @@ import qouteall.imm_ptl.core.portal.nether_portal.GeneralBreakablePortal;
 
 public class TemporaryPortal extends Portal {
     public static final EntityType<TemporaryPortal> entityType = TDEntity_Types.TEMP_PORTAL.get();
+    public double targetWidth = 1;
     public TemporaryPortal(EntityType<?> entityType, Level world) {
         super(entityType, world);
     }
@@ -21,9 +22,18 @@ public class TemporaryPortal extends Portal {
         super.onEntityTeleportedOnServer(entity);
         String name = "Entity";
         if(entity instanceof ServerPlayer sp) name = sp.getDisplayName().getString();
-        TransDimensionalSword.LOGGER.info(name + " has used a portal");
+        //TransDimensionalSword.LOGGER.info(name + " has used a portal");
         PortalManipulation.removeConnectedPortals(this, p -> blank());
         this.remove(RemovalReason.KILLED);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if(this.width != targetWidth  && !this.level.isClientSide()) {
+            this.width = targetWidth;
+            reloadPortal();
+        }
     }
     private void blank(){}
     /*
@@ -43,4 +53,9 @@ public class TemporaryPortal extends Portal {
     }
 
      */
+    private void reloadPortal() {
+        this.updateCache();
+        this.rectifyClusterPortals(true);
+        this.reloadAndSyncToClient();
+    }
 }

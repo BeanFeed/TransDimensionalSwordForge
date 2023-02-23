@@ -164,7 +164,7 @@ public class TDSword extends Item {
             ItemStack lapisStack = itemHandler.getStackInSlot(1);
             if(lapisStack.getCount() == 0) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
             ItemStack itemStack = itemHandler.getStackInSlot(2);
-            TransDimensionalSword.LOGGER.info(String.valueOf(Rune.getWaypointNBT(itemStack, pPlayer)));
+            //TransDimensionalSword.LOGGER.info(String.valueOf(Rune.getWaypointNBT(itemStack, pPlayer)));
             lapisStack.shrink(1);
             itemStack.save(Rune.getWaypointNBT(itemStack, pPlayer));
             itemStack.setHoverName(Component.translatable("item.tdsword.filled_rune"));
@@ -176,7 +176,7 @@ public class TDSword extends Item {
             updateItemHandler(pPlayer.getItemInHand(pUsedHand));
             updateActive(pPlayer.getItemInHand(pUsedHand));
             ItemStack stack = itemHandler.getStackInSlot(0);
-            TransDimensionalSword.LOGGER.info("Check Activate");
+            //TransDimensionalSword.LOGGER.info("Check Activate");
             //TransDimensionalSword.LOGGER.info(String.valueOf(stack.getCount() == 0));
             if(stack.getCount() == 0) return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
             else {

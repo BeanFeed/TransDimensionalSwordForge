@@ -50,7 +50,7 @@ public class PortalUtils {
                 portal.setPosRaw(pos.x, pos.y, pos.z);
                 portal.axisW = axisW;
                 portal.axisH = axisH;
-                portal.width = width;
+                portal.width = 0.001;
                 portal.height = height;
                 return portal;
             }
