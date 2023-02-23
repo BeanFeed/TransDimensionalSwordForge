@@ -4,15 +4,11 @@ import com.beanfeed.tdsword.PortalUtils;
 import com.beanfeed.tdsword.TransDimensionalSword;
 import com.beanfeed.tdsword.entity.TemporaryPortal;
 import com.beanfeed.tdsword.items.TDSword;
-import com.beanfeed.tdsword.particle.PortalBorderParticle;
-import com.beanfeed.tdsword.particle.TDParticles;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -32,7 +28,7 @@ public class TDEvents {
                 //Do Code
                 //TransDimensionalSword.LOGGER.info("Swung Sword");
                 Vec3 toGo = sword.getLastWaypoint(event.getItemStack());
-                TransDimensionalSword.LOGGER.info(String.valueOf(toGo));
+                //TransDimensionalSword.LOGGER.info(String.valueOf(toGo));
                 //toGo != null checks if the sword has a saved waypoint. If not then don't run
                 //event.getEntity() != null double checks that the entity isn't null
                 //!event.getLevel().isClientSide() makes sure the code is only ran on the server
@@ -90,10 +86,7 @@ public class TDEvents {
     @Mod.EventBusSubscriber(modid = TransDimensionalSword.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public class ModEventBusEvents {
 
-        @SubscribeEvent
-        public static void RegisterParticleProvidersEvent(final RegisterParticleProvidersEvent event) {
-            Minecraft.getInstance().particleEngine.register(TDParticles.PORTAL_BORDER.get(), PortalBorderParticle.Factory::new);
-        }
+
     }
 
 
