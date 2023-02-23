@@ -45,8 +45,8 @@ public class TDSwordMenu extends AbstractContainerMenu {
         }
         this.itemHandler = slots;
         this.itemStack = itemStack;
-        TransDimensionalSword.LOGGER.info("Does sword contain Active key: " + String.valueOf(itemStack.getOrCreateTag().contains("active")));
-        TransDimensionalSword.LOGGER.info("Key value: " + String.valueOf(itemStack.getOrCreateTag().getBoolean("active")));
+        //TransDimensionalSword.LOGGER.info("Does sword contain Active key: " + String.valueOf(itemStack.getOrCreateTag().contains("active")));
+        //TransDimensionalSword.LOGGER.info("Key value: " + String.valueOf(itemStack.getOrCreateTag().getBoolean("active")));
         this.isActivated = itemStack.getOrCreateTag().contains("active") && itemStack.getOrCreateTag().getBoolean("active");
 
         //this.data = data;
