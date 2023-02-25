@@ -13,6 +13,7 @@ import qouteall.imm_ptl.core.portal.nether_portal.GeneralBreakablePortal;
 public class TemporaryPortal extends Portal {
     public static final EntityType<TemporaryPortal> entityType = TDEntity_Types.TEMP_PORTAL.get();
     public double targetWidth = 1;
+    private int wait = 1;
     public TemporaryPortal(EntityType<?> entityType, Level world) {
         super(entityType, world);
     }
@@ -30,10 +31,10 @@ public class TemporaryPortal extends Portal {
     @Override
     public void tick() {
         super.tick();
-        if(this.width != targetWidth  && !this.level.isClientSide()) {
+        if(wait == 0 && this.width != targetWidth  && !this.level.isClientSide()) {
             this.width = targetWidth;
             reloadPortal();
-        }
+        } else wait--;
     }
     private void blank(){}
     /*
