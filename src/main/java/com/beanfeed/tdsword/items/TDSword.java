@@ -9,6 +9,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -165,7 +166,7 @@ public class TDSword extends Item {
             if(!pPlayer.level.isClientSide()) {
                 pPlayer.openMenu(new SimpleMenuProvider(
                         (containerid, playerInventory, player) -> new TDSwordMenu(containerid, playerInventory, playerInventory.player.getItemInHand(pUsedHand), itemHandler),
-                        Component.translatable("menu.title.tdsword.tdswordmenu")
+                        new TranslatableComponent("menu.title.tdsword.tdswordmenu")
                 ));
                 //TransDimensionalSword.LOGGER.info("Open");
             }
@@ -177,7 +178,7 @@ public class TDSword extends Item {
             //TransDimensionalSword.LOGGER.info(String.valueOf(Rune.getWaypointNBT(itemStack, pPlayer)));
             lapisStack.shrink(1);
             itemStack.save(Rune.getWaypointNBT(itemStack, pPlayer));
-            itemStack.setHoverName(Component.translatable("item.tdsword.filled_rune"));
+            itemStack.setHoverName(new TranslatableComponent("item.tdsword.filled_rune"));
             CompoundTag nbt = pPlayer.getItemInHand(pUsedHand).getOrCreateTag();
             nbt.put("inventory", itemHandler.serializeNBT());
             //var rotation = new Vec3(Math.round(tempLastWaypointRotation), 0, Math.round(tempLastWaypointRotation);

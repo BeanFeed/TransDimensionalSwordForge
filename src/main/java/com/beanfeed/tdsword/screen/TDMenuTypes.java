@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class TDMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENU_TYPES =
-            DeferredRegister.create(ForgeRegistries.MENU_TYPES, TransDimensionalSword.MODID);
+            DeferredRegister.create(ForgeRegistries.CONTAINERS, TransDimensionalSword.MODID);
     public static final RegistryObject<MenuType<TDSwordMenu>> TD_SWORD_MENU = registerMenuType(TDSwordMenu::new, "td_sword_menu");
 
     public static void register(IEventBus bus) {

@@ -10,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -35,7 +34,7 @@ public class TDEvents {
                 if(sword.getGoldAmount(event.getItemStack()) == 0) return;
 
                 if(!sword.canSpawn()) return;
-                if(toGo != null && event.getEntity() != null && !event.getLevel().isClientSide() && event.getFace() == Direction.UP) {
+                if(toGo != null && event.getEntity() != null && !event.getWorld().isClientSide() && event.getFace() == Direction.UP) {
                     //gets block to spawn portal on top of
 
                     BlockPos orgtoSpawn = event.getPos();
