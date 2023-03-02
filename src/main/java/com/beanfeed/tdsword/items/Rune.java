@@ -1,6 +1,7 @@
 package com.beanfeed.tdsword.items;
 
 import com.beanfeed.tdsword.TransDimensionalSword;
+import com.beanfeed.tdsword.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -51,7 +53,14 @@ public class Rune extends Item {
 
         if(nbt.contains("waypoint")) { return nbt;}
         var position = pPlayer.position();
+        if(pPlayer.level.getBlockState(Utils.Vec3ToBlockPos(position)).getBlock() != Blocks.AIR) {
+            for(double i = position.y; pPlayer.level.getBlockState(new BlockPos(position.x, i, position.z)).getBlock() != Blocks.AIR; i++) {
+                position = new Vec3(position.x, i, position.z);
+            }
+        }
+
         var pPos = new BlockPos(((int)position.x), position.y + 1, ((int)position.z));
+
         //TransDimensionalSword.LOGGER.info(String.valueOf(pPos));
         CompoundTag waypoint = NbtUtils.writeBlockPos(pPos);
         //CompoundTag rotation = new CompoundTag();
