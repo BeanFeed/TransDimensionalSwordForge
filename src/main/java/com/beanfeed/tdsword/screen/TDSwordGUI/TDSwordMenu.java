@@ -48,7 +48,7 @@ public class TDSwordMenu extends AbstractContainerMenu {
         //TransDimensionalSword.LOGGER.info("Does sword contain Active key: " + String.valueOf(itemStack.getOrCreateTag().contains("active")));
         //TransDimensionalSword.LOGGER.info("Key value: " + String.valueOf(itemStack.getOrCreateTag().getBoolean("active")));
         this.isActivated = itemStack.getOrCreateTag().contains("active") && itemStack.getOrCreateTag().getBoolean("active");
-
+        if(!this.isActivated) TE_INVENTORY_SLOT_COUNT = 1;
         //this.data = data;
         addPlayerHotbar(inv);
         addPlayerInventory(inv);
@@ -63,7 +63,7 @@ public class TDSwordMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 2;  // must be the number of slots you have!
+    private static int TE_INVENTORY_SLOT_COUNT = 3;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
         Slot sourceSlot = slots.get(index);
