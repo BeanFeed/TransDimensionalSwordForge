@@ -33,6 +33,8 @@ public class TDEvents {
                 //event.getEntity() != null double checks that the entity isn't null
                 //!event.getLevel().isClientSide() makes sure the code is only ran on the server
                 if(sword.getGoldAmount(event.getItemStack()) == 0) return;
+
+                if(!sword.canSpawn()) return;
                 if(toGo != null && event.getEntity() != null && !event.getLevel().isClientSide() && event.getFace() == Direction.UP) {
                     //gets block to spawn portal on top of
 

@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
@@ -38,6 +39,15 @@ public class TDSword extends Item {
     private List<Vec3> Waypoints;
     private float lastWaypointYRotation = 0.0f;
     private ResourceKey<Level> lastDim = null;
+    private int cooldown = 0;
+
+    public boolean canSpawn() {
+        return cooldown == 0;
+    }
+
+    public void startCooldown() {
+        cooldown = 20;
+    }
     public TDSword(Properties pProperties) {
         super(pProperties);
         /*
@@ -196,5 +206,8 @@ public class TDSword extends Item {
         CompoundTag nbt = stack.getOrCreateTag();
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
     }
-
+    @Override
+    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        if(cooldown != 0) cooldown--;
+    }
 }
