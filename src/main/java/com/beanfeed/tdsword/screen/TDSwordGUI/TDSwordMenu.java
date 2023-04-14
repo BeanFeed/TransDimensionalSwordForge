@@ -22,10 +22,11 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
+import org.apache.commons.lang3.SerializationUtils;
 
 public class TDSwordMenu extends AbstractContainerMenu {
     private final Level level;
-    private final ItemStackHandler itemHandler;
+    private final ItemStackHandler itemHandler = new ItemStackHandler(3);
     private final TDSItemStackHandler tdsitemHandler= new TDSItemStackHandler(3);
     private final ItemStack itemStack;
     public final boolean isActivated;
@@ -43,7 +44,7 @@ public class TDSwordMenu extends AbstractContainerMenu {
         if(slots.getStackInSlot(0).is(Items.GHAST_TEAR)) {
             this.tdsitemHandler.setStackInSlot(0,slots.getStackInSlot(0));
         }
-        this.itemHandler = slots;
+        this.itemHandler.deserializeNBT(itemStack.getOrCreateTag().getCompound("inventory"));
         this.itemStack = itemStack;
         //TransDimensionalSword.LOGGER.info("Does sword contain Active key: " + String.valueOf(itemStack.getOrCreateTag().contains("active")));
         //TransDimensionalSword.LOGGER.info("Key value: " + String.valueOf(itemStack.getOrCreateTag().getBoolean("active")));
@@ -60,17 +61,17 @@ public class TDSwordMenu extends AbstractContainerMenu {
     private static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
     private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
-    private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
+    private static final int TE_INVENTORY_FIRST_SLOT_INDEX = 36;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 2;  // must be the number of slots you have!
+    private int TE_INVENTORY_SLOT_COUNT = 1;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
         Slot sourceSlot = slots.get(index);
         if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyOfSourceStack = sourceStack.copy();
-
+        if(this.isActivated) TE_INVENTORY_SLOT_COUNT = 3;
         // Check if the slot clicked is one of the vanilla container slots
         if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
             // This is a vanilla container slot so merge the stack into the tile inventory
